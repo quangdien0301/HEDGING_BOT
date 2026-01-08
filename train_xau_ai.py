@@ -1,7 +1,7 @@
 import MetaTrader5 as mt5
 import pandas as pd
 import numpy as np
-import joblib
+#import joblib
 from datetime import datetime, timedelta
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, classification_report
@@ -9,11 +9,11 @@ from sklearn.metrics import accuracy_score, classification_report
 # =====================
 # CONFIG
 # =====================
-SYMBOL = "XAUUSD"
+SYMBOL = "XAUUSDc"
 TIMEFRAME = mt5.TIMEFRAME_M1
 LOOKAHEAD = 5          # dự đoán sau 5 nến
 DATA_MONTHS = 6        # số tháng dữ liệu
-MODEL_PATH = "xau_ai_model.pkl"
+MODEL_PATH = "xau_ai_model.json"
 
 FEATURES = [
     "return", "ema_fast", "ema_slow",
@@ -129,10 +129,12 @@ def main():
 
     model = train_model(df)
 
-    joblib.dump(model, MODEL_PATH)
-    print(f"💾 Model saved to {MODEL_PATH}")
+    #joblib.dump(model, MODEL_PATH)
+    model.save_model(MODEL_PATH)
+    print(f"💾 Model saved → {MODEL_PATH}")
 
     mt5.shutdown()
 
 if __name__ == "__main__":
     main()
+
