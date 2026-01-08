@@ -2,13 +2,14 @@ import MetaTrader5 as mt5
 import pandas as pd
 import numpy as np
 import time
-import joblib
+#import joblib
 from datetime import datetime
+from xgboost import XGBClassifier
 
 # =====================
 # CONFIG
 # =====================
-SYMBOL = "XAUUSD"
+SYMBOL = "XAUUSDc"
 TIMEFRAME = mt5.TIMEFRAME_M1
 LOT = 0.01
 
@@ -16,7 +17,7 @@ CONFIDENCE = 0.65
 MAX_SPREAD = 30
 MAGIC = 888999
 
-MODEL_PATH = "xau_ai_model.pkl"
+MODEL_PATH = "xau_ai_model.json"
 
 FEATURES = [
     "return", "ema_fast", "ema_slow",
@@ -67,8 +68,8 @@ def build_features(df):
 # =====================
 # AI
 # =====================
-model = joblib.load(MODEL_PATH)
-
+model = XGBClassifier()
+model.load_model("MODEL_PATH")
 def ai_predict(df):
     X = df[FEATURES].iloc[-1].values.reshape(1, -1)
     prob = model.predict_proba(X)[0]
@@ -173,3 +174,4 @@ def run():
 # =====================
 if __name__ == "__main__":
     run()
+
